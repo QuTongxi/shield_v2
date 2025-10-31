@@ -2,7 +2,6 @@ FROM python:3.13-slim
 RUN apt-get update && apt-get install -y \
     curl \
     gnupg \
-    git \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \

@@ -168,8 +168,8 @@ async def test_scenario_4_short_run():
     try:
         container = await test_function(Configuration)
         logger.info(f"容器已启动: {container.id[:12]}")
-        logger.info("运行5秒后自动清理...")
-        await asyncio.sleep(5)
+        logger.info("运行15秒后自动清理...")
+        await asyncio.sleep(15)
         
         # 清理容器
         try:
