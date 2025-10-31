@@ -1,0 +1,30 @@
+{
+    "McpServers":{
+        "filesystem": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "/home/godqu/workspace/study/test_filesystem"
+            ],
+            "type": "stdio",
+            "env":{}
+        },
+        "fetch": {
+            "command": "uvx",
+            "args": ["mcp-server-fetch"]
+        },
+        "memory": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-memory"
+            ]
+          },
+          "git": {
+            "command": "uvx",
+            "args": ["mcp-server-git", "--repository", "/home/godqu/workspace/study/test_git_repo"]
+          }
+               
+    }
+}

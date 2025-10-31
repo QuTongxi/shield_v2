@@ -1,0 +1,22 @@
+{
+    "McpServers": {
+        "filesystem": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "/app/test_filesystem"
+            ],
+            "type": "stdio",
+            "env": {}
+        },
+        "git": {
+            "command": "uvx",
+            "args": [
+                "mcp-server-git",
+                "--repository",
+                "/app/test_git_repo"
+            ]
+        }
+    }
+}

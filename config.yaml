@@ -1,0 +1,9 @@
+# MCP Agent 配置文件
+openai_api_key: "sk-c0d3d24b6eab4b9fbbf654c2a8817980"
+openai_model: "qwen3-max"
+openai_api_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+
+
+mcp_config_path: "mcp.json"
+docker_build_path: "./build/"
+

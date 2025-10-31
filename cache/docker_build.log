@@ -1,0 +1,66 @@
+Step 1/13 : FROM python:3.13-slim
+ ---> 441ed6af7d7c
+Step 2/13 : RUN apt-get update && apt-get install -y     curl     gnupg     git     && rm -rf /var/lib/apt/lists/*
+ ---> Using cache
+ ---> 5365af1e4b89
+Step 3/13 : RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -     && apt-get install -y nodejs     && rm -rf /var/lib/apt/lists/*
+ ---> Using cache
+ ---> 75a595d17801
+Step 4/13 : RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ ---> Using cache
+ ---> 18451e295502
+Step 5/13 : ENV PATH="/root/.local/bin:$PATH"
+ ---> Using cache
+ ---> da290d2b4fa2
+Step 6/13 : WORKDIR /app
+ ---> Using cache
+ ---> 92d2dde5962c
+Step 7/13 : COPY test_filesystem /app/test_filesystem
+ ---> Using cache
+ ---> 605d872f7f37
+Step 8/13 : COPY test_git_repo /app/test_git_repo
+ ---> Using cache
+ ---> e21b0bddb76d
+Step 9/13 : COPY mcp.json ./
+ ---> Using cache
+ ---> 7d6d5127bfb0
+Step 10/13 : COPY pyproject.toml uv.lock ./
+ ---> Using cache
+ ---> 7161011bca9a
+Step 11/13 : COPY shield_mcp /app/shield_mcp
+ ---> Using cache
+ ---> c8a549d67560
+Step 12/13 : RUN uv sync
+ ---> Using cache
+ ---> 9e85685dde28
+Step 13/13 : CMD ["/app/.venv/bin/python", "/app/shield_mcp/proxy_mcp.py"]
+ ---> Using cache
+ ---> adfd7653d356
+Successfully built adfd7653d356
+Successfully tagged shield_v2:latest
+DEBUG:__main__:Connecting to server filesystem with config {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-filesystem', '/app/test_filesystem'], 'type': 'stdio', 'env': {}}
+DEBUG:__main__:Connecting to stdio server filesystem with params command='npx' args=['-y', '@modelcontextprotocol/server-filesystem', '/app/test_filesystem'] env={} cwd=None encoding='utf-8' encoding_error_handler='strict'
+Secure MCP Filesystem Server running on stdio
+Client does not support MCP Roots, using allowed directories set from server args: [ '/app/test_filesystem' ]
+DEBUG:__main__:
+Connected to server with tools: ['read_file', 'read_text_file', 'read_media_file', 'read_multiple_files', 'write_file', 'edit_file', 'create_directory', 'list_directory', 'list_directory_with_sizes', 'directory_tree', 'move_file', 'search_files', 'get_file_info', 'list_allowed_directories']
+DEBUG:__main__:Connecting to server fetch with config {'command': 'uvx', 'args': ['mcp-server-fetch']}
+DEBUG:__main__:Connecting to stdio server fetch with params command='uvx' args=['mcp-server-fetch'] env=None cwd=None encoding='utf-8' encoding_error_handler='strict'
+Downloading lxml (5.0MiB)
+Downloading pydantic-core (2.0MiB)
+ Downloading pydantic-core
+ Downloading lxml
+Installed 40 packages in 207ms
+DEBUG:__main__:
+Connected to server with tools: ['fetch']
+DEBUG:__main__:Connecting to server memory with config {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-memory']}
+DEBUG:__main__:Connecting to stdio server memory with params command='npx' args=['-y', '@modelcontextprotocol/server-memory'] env=None cwd=None encoding='utf-8' encoding_error_handler='strict'
+Knowledge Graph MCP Server running on stdio
+DEBUG:__main__:
+Connected to server with tools: ['create_entities', 'create_relations', 'add_observations', 'delete_entities', 'delete_observations', 'delete_relations', 'read_graph', 'search_nodes', 'open_nodes']
+DEBUG:__main__:Connecting to server git with config {'command': 'uvx', 'args': ['mcp-server-git', '--repository', '/app/test_git_repo']}
+DEBUG:__main__:Connecting to stdio server git with params command='uvx' args=['mcp-server-git', '--repository', '/app/test_git_repo'] env=None cwd=None encoding='utf-8' encoding_error_handler='strict'
+Installed 30 packages in 37ms
+DEBUG:__main__:
+Connected to server with tools: ['git_status', 'git_diff_unstaged', 'git_diff_staged', 'git_diff', 'git_commit', 'git_add', 'git_reset', 'git_log', 'git_create_branch', 'git_checkout', 'git_show', 'git_branch']
+DEBUG:__main__:Connected to MCP servers

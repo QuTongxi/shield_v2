@@ -1,0 +1,8 @@
+[2024-06-11 15:33:45] INFO: Server started at port 8080
+[2024-06-11 15:33:47] DEBUG: Connection from 127.0.0.1:49234 established
+[2024-06-11 15:34:01] INFO: User 'alice' logged in
+[2024-06-11 15:34:05] WARNING: Disk usage at 87%
+[2024-06-11 15:34:15] ERROR: Failed to read file '/data/config.yml'
+[2024-06-11 15:34:18] INFO: User 'alice' executed 'ls -al'
+[2024-06-11 15:34:22] DEBUG: Closing connection for 127.0.0.1:49234
+[2024-06-11 15:34:23] INFO: Server shutting down
