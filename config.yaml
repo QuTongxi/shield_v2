@@ -7,3 +7,5 @@ openai_api_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
 mcp_config_path: "mcp.json"
 docker_build_path: "./build/"
 
+
+

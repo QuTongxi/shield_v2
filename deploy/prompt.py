@@ -52,3 +52,21 @@ CONFIG_REWRITE="""
 {format_information}
 
 """
+
+DOCKERFILE_DEBUG="""
+### 你的任务
+根据我为你提供的tools，结合报错信息，尝试利用工具完成docker镜像与容器的构建。
+
+### 报错信息
+{error_information}
+### 输出格式
+{format_information}
+### 执行要求
+1. 你无法直接写入Dockerfile文件，必须利用我提供的INSTALL和RUN工具来插入命令，然后利用write_to_dockerfile()来写入Dockerfile。
+2. 我在docker中运行的命令为{command_information}，你无需在Dockerfile中添加该命令。
+3. 根据提供的报错信息，尝试检查是否为缺少某些安装包导致，你可以利用我提供的INSTALL工具来添加安装包。
+4. 如果报错由其他原因导致，将'status'设置为'failed'，给出错误原因以及修改建议。
+5. 你只有有限的直接debug能力，对于超过你能力之外的工作，请将'status'设置为'failed'。
+6. 我为你提供了build_container()工具，可用于自主测试。
+
+"""

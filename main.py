@@ -7,6 +7,7 @@ import argparse
 
 from utils.configuration import Configuration
 from deploy.server_info import parse_server_info, build_docker_project
+from deploy.execute import try_execute_dockerfile
 
 
 logging.basicConfig(
@@ -34,6 +35,7 @@ async def run():
 
     await parse_server_info(Configuration)
     build_docker_project(Configuration)
+    await try_execute_dockerfile({})
 
 def main():
     asyncio.run(run())

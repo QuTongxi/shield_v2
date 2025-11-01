@@ -3,6 +3,8 @@ import shutil
 from typing import Dict
 import uuid
 
+from langchain_core.tools import tool
+
 from .template import DOCKERFILE_TEMPLATE
 from utils.configuration import Configuration
 import logging
@@ -89,9 +91,28 @@ def make_dockerfile_commands(mappings: Dict[str, str], config:Configuration) -> 
    
     return True
 
-def write_dockerfile(config:Configuration) -> bool:
+@tool
+def write_to_dockerfile() -> str:
+    """
+    Write all Dockerfile commands to the Dockerfile.
+    Returns:
+        bool: True if the Dockerfile is written successfully, False otherwise.
+    """
+    flag = write_dockerfile()
+    if flag:
+        return 'success'
+    else:
+        return 'failed'
+
+
+def write_dockerfile(config=None) -> bool:
+    """
+    Write all Dockerfile commands to the Dockerfile.
+    Returns:
+        bool: True if the Dockerfile is written successfully, False otherwise.
+    """
     try:
-        with open(os.path.join(config.docker_build_path, 'Dockerfile'), 'w') as f:
+        with open(os.path.join(Configuration.docker_build_path, 'Dockerfile'), 'w') as f:
             f.write(DOCKERFILE_TEMPLATE.format(
                 install_commands='\n'.join([str(cmd) for cmd in DockerCommands['install_commands']]),
                 env_commands='\n'.join([str(cmd) for cmd in DockerCommands['env_commands']]),
@@ -104,6 +125,23 @@ def write_dockerfile(config:Configuration) -> bool:
         exit(1)
 
 
+@tool
+def install_package(package_name: str) -> str:
+    """
+    Insert the package install command to the Dockerfile.
+    Returns:
+        bool: True if the package install command is inserted successfully, False otherwise.
+    """
+    DockerCommands['install_commands'].append(INSTALL(package_name))
+    return 'success'
 
-
-    
+@tool
+def insert_run_command(cmd: str = None, args: str = None) -> str:
+    """
+    Insert the RUN command to the Dockerfile.
+    For Install command, use install_package() instead.
+    Returns:
+        bool: True if the command is inserted successfully, False otherwise.
+    """
+    DockerCommands['other_run_commands'].append(RUN(cmd, args))
+    return 'success'

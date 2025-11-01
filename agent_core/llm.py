@@ -30,6 +30,8 @@ async def run_llm_loop(
         api_key=configuration.openai_api_key,
         base_url=configuration.openai_api_url,
     )
+
+    tool_dict = {tool.name: tool for tool in tool_list}
     if tool_list:
         llm = llm.bind_tools(tool_list)
 
@@ -53,7 +55,7 @@ async def run_llm_loop(
             # 执行所有工具调用
             messages.append(response)
             for tool_call in response.tool_calls:
-                tool_message = getattr(tools, tool_call['name']).invoke(tool_call)
+                tool_message = tool_dict[tool_call['name']].invoke(tool_call)
                 messages.append(tool_message)
             
             response = await llm.ainvoke(messages, config=config)   

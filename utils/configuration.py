@@ -15,6 +15,10 @@ class Configuration:
     docker_build_path: str = 'dockers/'
     docker_image_name: str = 'shield_v2:latest'
 
+    # 默认的CMD命令
+    default_cmd: str = "/app/.venv/bin/python /app/shield_mcp/proxy_mcp.py"
+    default_debug_cmd: str = "/app/.venv/bin/python /app/shield_mcp/proxy_mcp.py --debug"
+
 
     @staticmethod
     def load_from_yaml(yaml_path: str) -> None:
@@ -40,7 +44,7 @@ class Configuration:
         ) -> 'Configuration':
         """Create a Configuration instance from a RunnableConfig."""
         configurable = (
-            config["configurable"] if config and "configurable" in config else {}
+            config["configurable"] if "configurable" in config else {}
         )
         
         # 获取当前类属性的值作为默认值

@@ -19,13 +19,14 @@ import logging
 logging.getLogger("httpx").setLevel(logging.CRITICAL)
 logging.getLogger("mcp").setLevel(logging.CRITICAL)
 logging.basicConfig(level=logging.WARNING)
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
+log = logging.getLogger('shield_v2.shield_mcp.proxy_mcp')
+log.setLevel(logging.INFO)
 
 import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--mcp', type=str, default='mcp.json')
+parser.add_argument('--debug', action='store_true', help='Debug mode: connect to all servers and exit')
 args = parser.parse_args()
 
 # ============================================================================
@@ -38,7 +39,7 @@ def handle_errors(func):
             return await func(*args, **kwargs)
         except Exception as e:
             log.error(f"Error in {func.__name__}: {e}")
-            raise
+            exit(1)
     return wrapper
 
 class McpClient:
@@ -69,6 +70,7 @@ class McpClient:
         response = await self.session.list_tools()       
         tools = response.tools
         log.debug(f"\nConnected to server with tools: {[tool.name for tool in tools]}")
+        log.info(f'Connect to server {server_name} successfully!')
     
     @handle_errors
     async def close(self):
@@ -158,9 +160,10 @@ async def list_tools() -> list[types.Tool]:
     return await mcp_host.get_tools_list()
 
 @server.call_tool()
-async def call_tool(tool_name: str, arguments: dict) -> dict[str, Any]:
+async def call_tool(tool_name: str, arguments: dict) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
     mcp_host = server.request_context.lifespan_context['mcp_host']
-    return await mcp_host.call_tool(tool_name, arguments)
+    result = await mcp_host.call_tool(tool_name, arguments)
+    return result.content
 
 @server.list_prompts()
 async def handle_list_prompts(request: types.ListPromptsRequest) -> types.ListPromptsResult:
@@ -196,6 +199,27 @@ async def run():
             ),
         )
 
+async def debug_connect():
+    """Debug mode: connect to all MCP servers and exit."""
+    log.info("Running in debug mode")
+    print('Debug mode: connecting to all MCP servers...')
+    
+    mcp_host = McpHost()
+    await mcp_host.load_mcp_config(args.mcp)
+    
+    server_names = mcp_host.get_server_names()
+    print(f'Successfully connected to {len(server_names)} server(s): {", ".join(server_names)}')
+    
+    # 清理资源
+    await mcp_host.close()
+    print('All servers disconnected. Exiting.')
+
 if __name__ == "__main__":
-    asyncio.run(run())
+    if args.debug:
+        log.info("Debug mode is not used for release version")
+        asyncio.run(debug_connect())
+    else:
+        log.info("Starting proxy server")
+        print('starting proxy server')
+        asyncio.run(run())
 

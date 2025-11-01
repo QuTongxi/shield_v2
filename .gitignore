@@ -28,6 +28,7 @@ Thumbs.db
 cache/
 build/
 *.log
+users/
 
 # Temporary files
 *.tmp
